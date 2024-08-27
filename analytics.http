@@ -1,6 +1,0 @@
-@analytics_HostAddress = http://localhost:5027
-
-GET {{analytics_HostAddress}}/
-Accept: application/json
-
-###
