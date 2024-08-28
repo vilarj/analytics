@@ -23,6 +23,7 @@ namespace analytics.Services
         {
             return await _context.Path_PageViews
             .AsNoTracking()
+            .OrderBy(e => e.page_path)
             .Skip((page - 1) * pageSize)
             .Take(pageSize)
             .Select(e => new Path_PageViews
