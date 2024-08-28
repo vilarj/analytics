@@ -1,4 +1,6 @@
 using analytics.Context;
+using analytics.Interfaces;
+using analytics.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -6,6 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddDbContext<AnalyticsContext>(options => options.UseSqlite(builder.Configuration.GetConnectionString("ConnString")));
 builder.Services.AddCors();
+builder.Services.AddScoped<IAnalyticsService, AnalyticsService>();
 
 var app = builder.Build();
 

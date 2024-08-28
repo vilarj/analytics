@@ -1,7 +1,6 @@
-using analytics.Context;
+using analytics.Interfaces;
 using analytics.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace analytics.Controllers
 {
@@ -9,25 +8,25 @@ namespace analytics.Controllers
     [Route("[controller]")]
     public class AnalyticsController : ControllerBase
     {
-        private readonly AnalyticsContext _context;
         private readonly ILogger<AnalyticsController> _logger;
+        private readonly IAnalyticsService _service;
 
-        public AnalyticsController(AnalyticsContext context, ILogger<AnalyticsController> logger)
+        public AnalyticsController(IAnalyticsService service, ILogger<AnalyticsController> logger)
         {
-            _context = context;
+            _service = service;
             _logger = logger;
         }
 
         [HttpGet("/api/GetData")]
-        public async Task<IEnumerable<Path_PageViews>> GetData()
+        public async Task<ActionResult<IEnumerable<Path_PageViews>>> GetData(int page = 1, int pageSize = 10)
         {
-            return await _context.Path_PageViews.Select(e => new Path_PageViews
-            {
-                page_title = e.page_title,
-                domain = e.domain,
-                page_path = e.page_path,
-                pageviews = e.pageviews
-            }).ToListAsync();
+            return await _service.GetData(page, pageSize);
+        }
+        
+        [HttpGet("/api/GetAllData")]
+        public async Task<ActionResult<IEnumerable<Path_PageViews>>> GetData()
+        {
+            return await _service.GetData();
         }
     }
 }
